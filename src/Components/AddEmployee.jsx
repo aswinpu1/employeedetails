@@ -1,6 +1,5 @@
 // src/components/AddEmployee.js
 import React from 'react';
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -11,15 +10,17 @@ const schema = yup.object().shape({
   status: yup.string().required('Status is required')
 });
 
-const AddEmployee = ({ fetchEmployees }) => {
+const AddEmployee = ({ addEmployee }) => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: yupResolver(schema)
   });
 
-  const onSubmit = async (data) => {
-    await axios.post('http://localhost:5000/employees', data);
-    reset();
-    fetchEmployees();  // Refresh employee list after adding
+  const onSubmit = (data) => {
+    addEmployee({
+      ...data,
+      id: Date.now()  // Generate a unique ID for the new employee (for the JSON server)
+    });
+    reset();  // Clear the form after submission
   };
 
   return (
@@ -37,6 +38,7 @@ const AddEmployee = ({ fetchEmployees }) => {
       <div>
         <label>Status</label>
         <select {...register('status')}>
+          <option value="">Select Status</option>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </select>

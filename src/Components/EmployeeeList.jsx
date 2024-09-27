@@ -1,24 +1,7 @@
 // src/components/EmployeeList.js
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 
-const EmployeeeList = ({ setEditingEmployee }) => {
-  const [employees, setEmployees] = useState([]);
-
-  const fetchEmployees = async () => {
-    const response = await axios.get('http://localhost:5000/employees');
-    setEmployees(response.data);
-  };
-
-  const deleteEmployee = async (id) => {
-    await axios.delete(`http://localhost:5000/employees/${id}`);
-    fetchEmployees();
-  };
-
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
-
+const EmployeeList = ({ employees, setEditingEmployee, deleteEmployee }) => {
   return (
     <table>
       <thead>
@@ -48,4 +31,4 @@ const EmployeeeList = ({ setEditingEmployee }) => {
   );
 };
 
-export default EmployeeeList;
+export default EmployeeList;
