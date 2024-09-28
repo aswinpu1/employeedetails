@@ -4,6 +4,8 @@ import './App.css';
 import AddEmployee from './Components/AddEmployee';
 import EmployeeList from './Components/EmployeeeList';
 import EditEmployee from './Components/EditEmployee';
+
+import serverUrl from './baseURL';
 import axios from 'axios';
 
 function App() {
@@ -12,7 +14,7 @@ function App() {
 
   // Fetch employees from the server initially
   const fetchEmployees = async () => {
-    const response = await axios.get('http://localhost:3000/employees');
+    const response = await axios.get(`${serverUrl}/employees`);
     setEmployees(response.data);
   };
 
@@ -22,20 +24,20 @@ function App() {
 
   // Add employee to state and database
   const addEmployee = async (newEmployee) => {
-    const response = await axios.post('http://localhost:3000/employees', newEmployee);
+    const response = await axios.post(`${serverUrl}/employees`, newEmployee);
     setEmployees([...employees, response.data]);  // Update state directly with the new employee
   };
 
   // Update employee and state
   const updateEmployee = async (updatedEmployee) => {
-    const response = await axios.put(`http://localhost:3000/employees/${updatedEmployee.id}`, updatedEmployee);
+    const response = await axios.put(`${serverUrl}/employees/${updatedEmployee.id}`, updatedEmployee);
     setEmployees(employees.map(emp => emp.id === updatedEmployee.id ? response.data : emp));
     setEditingEmployee(null);  // Cancel edit mode after updating
   };
 
   // Delete employee and update state
   const deleteEmployee = async (id) => {
-    await axios.delete(`http://localhost:3000/employees/${id}`);
+    await axios.delete(`${serverUrl}/employees/${id}`);
     setEmployees(employees.filter(emp => emp.id !== id));
   };
 
